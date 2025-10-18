@@ -2,6 +2,10 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
+
 void showdir(char *path) {
     DIR *dir = opendir(path);
     struct dirent *entry;
@@ -43,10 +47,10 @@ int main(int argc, char *argv[]) {
         return 1;
 
     if (S_ISDIR(PathStat.st_mode)) {
-        printf("\n[+] Directorio \n\n");
+        printf(ANSI_COLOR_BLUE"\n[+] Directory \n\n"ANSI_COLOR_RESET);
         showdir(path);
     } else if (S_ISREG(PathStat.st_mode)) {
-        printf("\n[+] Archivo \n\n");
+        printf(ANSI_COLOR_BLUE"\n[+] File \n\n"ANSI_COLOR_RESET);
         showfile(path);
     } else {
         return 1;

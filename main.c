@@ -1,9 +1,9 @@
-#include <stdio.h> // Entrada y salida
+#include <stdio.h> // Entrada y salida y colores
 #include <sys/stat.h>
 #include <dirent.h>
 
-
-
+#define ANSI_COLOR_BLUE    "\x1b[34m" // Definir el color azul
+#define ANSI_COLOR_RESET   "\x1b[0m" // Hacer que el texto ya no se imprima en azul
 
 
 // Leer directorios
@@ -96,12 +96,12 @@ int main(int argc, char *argv[]) { // Necesario para pasar argumentos
 
 	if (S_ISDIR(PathStat.st_mode)) { // Lee el metadato y determina si es un directorio
 	
-		printf("\n[+] Directorio \n\n");
+		printf(ANSI_COLOR_BLUE"\n [+] Directorio \n\n"ANSI_COLOR_RESET);
 		showdir(path);
 
 	} else if (S_ISREG(PathStat.st_mode)) {
 	
-		printf("\n[+] Archivo \n\n");
+		printf(ANSI_COLOR_BLUE"\n [+] Archivo \n\n"ANSI_COLOR_RESET);
 		showfile(path);
 	
 	} else {
