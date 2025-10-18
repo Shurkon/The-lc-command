@@ -1,9 +1,12 @@
 #include <stdio.h> // Entrada y salida y colores
+#include <string.h> // Compara cadenas con strcmp
 #include <sys/stat.h>
 #include <dirent.h>
 
 #define ANSI_COLOR_BLUE    "\x1b[34m" // Definir el color azul
+#define ANSI_COLOR_GRAY    "\x1b[90m"  // Gris oscuro
 #define ANSI_COLOR_RESET   "\x1b[0m" // Hacer que el texto ya no se imprima en azul
+#define ANSI_COLOR_LIGHT_GRAY "\x1b[37m" // Gris claro para hacer el texto mas elegante
 
 
 // Leer directorios
@@ -14,8 +17,30 @@ void showdir(char *path) {
 
 
 	while ((entry = readdir(dir)) != NULL) {
+
+    char *result = entry->d_name; // Valor d_name de entry
+    unsigned char type = entry->d_type; // unsigned char = almacena un numero pequeño que representa lo que contiene
+
+    if (strcmp(result, ".") && strcmp(result, "..") != 0) { // Si no coincide con . o .. sigue
+
+      if (result[0] == '.') { // Si la primera cadena es . colorea de girs 
+
+        printf(ANSI_COLOR_GRAY"%s \n"ANSI_COLOR_RESET, result);
+
+
+      } else if (type == DT_DIR) {
+
+        printf(ANSI_COLOR_BLUE"%s \n"ANSI_COLOR_RESET, result);
+
+      } else {
+
+        printf("%s \n", result);
+
+      }
+
+    }
 	
-		printf("%s\n", entry->d_name); // d_name es un campo de entry
+		//printf("%s\n", entry->d_name); // d_name es un campo de entry
 
 	}
 
@@ -42,7 +67,16 @@ void showfile(char *path) {
 
 
     	while ((n = fread(buffer, 1, sizeof(buffer), file)) > 0) {
-        	fwrite(buffer, 1, n, stdout); // imprimir en pantalla
+
+        // Poner el color gris
+        fwrite(ANSI_COLOR_LIGHT_GRAY, 1, strlen(ANSI_COLOR_LIGHT_GRAY), stdout);
+
+        // Escribir el contenido del archivo
+        fwrite(buffer, 1, n, stdout);
+
+        // Resetear el color
+        fwrite(ANSI_COLOR_RESET, 1, strlen(ANSI_COLOR_RESET), stdout);
+
     	}
 
 
